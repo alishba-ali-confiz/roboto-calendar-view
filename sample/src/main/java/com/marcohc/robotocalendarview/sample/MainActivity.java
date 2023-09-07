@@ -17,12 +17,15 @@ package com.marcohc.robotocalendarview.sample;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.Toast;
 
 import com.marcohc.robotocalendarview.RobotoCalendarView;
 import com.marcohc.robotocalendarview.RobotoCalendarView.RobotoCalendarListener;
 
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Random;
@@ -33,6 +36,7 @@ import io.github.inflationx.viewpump.ViewPumpContextWrapper;
 public class MainActivity extends AppCompatActivity implements RobotoCalendarListener {
 
     private RobotoCalendarView robotoCalendarView;
+    private Date date;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,24 +50,35 @@ public class MainActivity extends AppCompatActivity implements RobotoCalendarLis
         Button markDayButton = findViewById(R.id.markDayButton);
         Button clearSelectedDayButton = findViewById(R.id.clearSelectedDayButton);
 
-        markDayButton.setOnClickListener(view -> {
-            Calendar calendar = Calendar.getInstance();
-            Random random = new Random(System.currentTimeMillis());
-            int style = random.nextInt(2);
-            int daySelected = random.nextInt(calendar.getActualMaximum(Calendar.DAY_OF_MONTH));
-            calendar.set(Calendar.DAY_OF_MONTH, daySelected);
+        int year = 2023;
+        int month = Calendar.SEPTEMBER; // Calendar.MONTH is 0-based, so August is 7
+        int day = 5;
 
-            switch (style) {
-                case 0:
-                    robotoCalendarView.markCircleImage1(calendar.getTime());
-                    break;
-                case 1:
-                    robotoCalendarView.markCircleImage2(calendar.getTime());
-                    break;
-                default:
-                    break;
-            }
-        });
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(year, month, day);
+
+        Date date = calendar.getTime();
+//        Log.i("TAGG","Date:  "+date);
+//        robotoCalendarView.markCircleImage2(date);
+
+//        markDayButton.setOnClickListener(view -> {
+//            Calendar calendar = Calendar.getInstance();
+//            Random random = new Random(System.currentTimeMillis());
+//            int style = random.nextInt(2);
+//            int daySelected = random.nextInt(calendar.getActualMaximum(Calendar.DAY_OF_MONTH));
+//            calendar.set(Calendar.DAY_OF_MONTH, daySelected);
+//
+//            switch (style) {
+//                case 0:
+//                    robotoCalendarView.markCircleImage1(calendar.getTime());
+//                    break;
+//                case 1:
+//                    robotoCalendarView.markCircleImage2(calendar.getTime());
+//                    break;
+//                default:
+//                    break;
+//            }
+//        });
 
         clearSelectedDayButton.setOnClickListener(v -> robotoCalendarView.clearSelectedDay());
 
@@ -74,7 +89,7 @@ public class MainActivity extends AppCompatActivity implements RobotoCalendarLis
 
         robotoCalendarView.showDateTitle(true);
 
-        robotoCalendarView.setDate(new Date());
+       robotoCalendarView.setDate(new Date());
     }
 
     @Override
@@ -95,11 +110,13 @@ public class MainActivity extends AppCompatActivity implements RobotoCalendarLis
     @Override
     public void onRightButtonClick() {
         Toast.makeText(this, "onRightButtonClick!", Toast.LENGTH_SHORT).show();
+        robotoCalendarView.invalidate();
     }
 
     @Override
     public void onLeftButtonClick() {
         Toast.makeText(this, "onLeftButtonClick!", Toast.LENGTH_SHORT).show();
+        robotoCalendarView.invalidate();
     }
 
 }

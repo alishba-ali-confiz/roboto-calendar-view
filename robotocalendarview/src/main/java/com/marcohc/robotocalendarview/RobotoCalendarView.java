@@ -34,6 +34,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.text.DateFormatSymbols;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
@@ -494,12 +495,29 @@ public class RobotoCalendarView extends LinearLayout {
         }
     }
 
+    private void markDayAsEvent(){
+        ArrayList<Event> eventArrayList = new ArrayList<>();
+        eventArrayList.add(new Event(2023, Calendar.SEPTEMBER, 10));
+        eventArrayList.add(new Event(2023, Calendar.DECEMBER, 10));
+        for(Event event : eventArrayList) {
+            Calendar calendar = Calendar.getInstance();
+            calendar.set(event.year, event.month, event.day);
+            if (calendar.get(Calendar.YEAR) == currentCalendar.get(Calendar.YEAR) && calendar.get(Calendar.MONTH) == currentCalendar.get(Calendar.MONTH)) {
+                Date date = calendar.getTime();
+                ViewGroup dayOfTheMonthBackground = getDayOfMonthBackground(calendar);
+                dayOfTheMonthBackground.setBackgroundResource(R.drawable.circle);
+            }
+
+        }
+    }
+
     private void updateView() {
         setUpMonthLayout();
         setUpWeekDaysLayout();
         setUpDaysOfMonthLayout();
         setUpDaysInCalendar();
         markDayAsCurrentDay();
+        markDayAsEvent();
     }
 
     private ViewGroup getDayOfMonthBackground(Calendar currentCalendar) {
@@ -536,6 +554,42 @@ public class RobotoCalendarView extends LinearLayout {
         void onRightButtonClick();
 
         void onLeftButtonClick();
+    }
+
+    public class Event {
+        private int year;
+        private int month;
+        private int day;
+
+        public Event(int year, int month, int day) {
+            this.year = year;
+            this.month = month;
+            this.day = day;
+        }
+
+        public int getYear() {
+            return year;
+        }
+
+        public void setYear(int year) {
+            this.year = year;
+        }
+
+        public int getMonth() {
+            return month;
+        }
+
+        public void setMonth(int month) {
+            this.month = month;
+        }
+
+        public int getDay() {
+            return day;
+        }
+
+        public void setDay(int day) {
+            this.day = day;
+        }
     }
 
 }

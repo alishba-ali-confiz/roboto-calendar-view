@@ -28,4 +28,5 @@
             android:layout_weight="1"
             android:text="Mark random day" />
     </LinearLayout>
+
 </RelativeLayout>
